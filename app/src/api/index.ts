@@ -33,9 +33,9 @@ export const bookApi = {
   uploadPdf: async (file: File): Promise<ApiResponse<{ url: string }>> => {
     const formData = new FormData();
     formData.append('file', file);
-    
+
     try {
-      const response = await fetch(`${API_BASE_URL}/pdfs/upload`, {
+      const response = await fetch(`${API_BASE_URL}/books/upload`, {
         method: 'POST',
         body: formData,
       });
@@ -51,7 +51,7 @@ export const bookApi = {
 
   // 提交PDF链接
   submitPdfUrl: async (url: string): Promise<ApiResponse<{ url: string }>> => {
-    return request<{ url: string }>('/pdfs/url', {
+    return request<{ url: string }>('/books/url', {
       method: 'POST',
       body: JSON.stringify({ url }),
     });

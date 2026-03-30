@@ -12,10 +12,16 @@ export function VideoResult() {
 
   const handleDownload = async () => {
     if (!project?.videoUrl) return;
-    
+
     setIsDownloading(true);
     try {
-      const response = await fetch(project.videoUrl);
+      // 从videoUrl提取文件名，转换为下载端点（使用完整URL）
+      const filename = project.videoUrl.split('/').pop();
+      const downloadUrl = `http://localhost:8000/api/videos/download/${filename}`;
+
+      const response = await fetch(downloadUrl);
+      if (!response.ok) throw new Error('Download failed');
+
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -26,7 +32,7 @@ export function VideoResult() {
       window.URL.revokeObjectURL(url);
       document.body.removeChild(a);
       toast.success('下载开始');
-    } catch (error) {
+    } catch {
       toast.error('下载失败，请直接右键视频保存');
     } finally {
       setIsDownloading(false);
@@ -41,7 +47,7 @@ export function VideoResult() {
           text: `看看我为《${project.bookName}》生成的短视频`,
           url: project.videoUrl,
         });
-      } catch (error) {
+      } catch {
         // 用户取消分享
       }
     } else {
@@ -77,10 +83,11 @@ export function VideoResult() {
           {project?.videoUrl ? (
             <div className="aspect-video bg-black">
               <video
-                src={project.videoUrl}
+                src={`http://localhost:8000${project.videoUrl}`}
                 controls
                 className="w-full h-full"
                 poster="/video-poster.jpg"
+                preload="metadata"
               >
                 你的浏览器不支持视频播放
               </video>

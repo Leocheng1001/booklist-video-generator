@@ -66,11 +66,12 @@ class ImageGenerationAgent(BaseAgent):
         
         headers = {
             "Authorization": f"Bearer {self.api_key}",
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            "X-DashScope-Async": "enable"
         }
         
         payload = {
-            "model": "wanx2.1-image",
+            "model": "wanx2.1-t2i-turbo",
             "input": {
                 "prompt": prompt
             },

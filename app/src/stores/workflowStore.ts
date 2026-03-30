@@ -22,7 +22,7 @@ interface WorkflowState {
   images: GeneratedImage[];
   
   // Actions
-  initProject: (bookName: string) => void;
+  initProject: (bookName: string, projectId?: string) => void;
   setProjectStatus: (status: WorkflowStatusType, progress?: number) => void;
   setBookPdf: (pdfUrl: string) => void;
   setUserRequirement: (requirement: string) => void;
@@ -63,16 +63,16 @@ export const useWorkflowStore = create<WorkflowState>()(
       script: null,
       images: [],
 
-      initProject: (bookName: string) => {
+      initProject: (bookName: string, projectId?: string) => {
         const newProject: Project = {
           ...initialProject,
-          id: Date.now().toString(),
+          id: projectId || Date.now().toString(),
           bookName,
           status: WorkflowStatus.IDLE,
         };
-        set({ 
-          project: newProject, 
-          currentStep: 0, 
+        set({
+          project: newProject,
+          currentStep: 0,
           error: null,
           knowledgePoints: [],
           script: null,

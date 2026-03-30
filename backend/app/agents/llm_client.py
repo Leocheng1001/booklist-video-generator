@@ -53,10 +53,13 @@ class LLMClient:
             response.raise_for_status()
             
             data = response.json()
-            if "output" in data and "choices" in data["output"]:
-                return data["output"]["choices"][0]["message"]["content"]
-            else:
-                raise Exception(f"LLM响应格式错误: {data}")
+            if "output" in data:
+                # 处理不同格式的响应
+                if "text" in data["output"]:
+                    return data["output"]["text"]
+                elif "choices" in data["output"]:
+                    return data["output"]["choices"][0]["message"]["content"]
+            raise Exception(f"LLM响应格式错误: {data}")
     
     async def generate_json(
         self,

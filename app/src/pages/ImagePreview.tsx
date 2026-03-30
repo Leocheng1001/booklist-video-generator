@@ -26,7 +26,7 @@ export function ImagePreview() {
       } else {
         toast.error(response.error || '重新生成失败');
       }
-    } catch (error) {
+    } catch {
       toast.error('重新生成出错');
     } finally {
       setRegeneratingId(null);
@@ -46,7 +46,7 @@ export function ImagePreview() {
       } else {
         toast.error(response.error || '生成失败');
       }
-    } catch (error) {
+    } catch {
       toast.error('生成出错，请稍后重试');
     } finally {
       setIsGeneratingVideo(false);

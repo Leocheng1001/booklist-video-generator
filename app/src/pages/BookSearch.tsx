@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
 import { useWorkflowStore } from '@/stores/workflowStore';
-import { bookApi } from '@/api';
+import { bookApi, projectApi } from '@/api';
 import type { Book as BookType } from '@/types';
 import { toast } from 'sonner';
 
@@ -28,24 +28,31 @@ export function BookSearch() {
     try {
       const response = await bookApi.search(keyword);
       if (response.success && response.data) {
-        setBooks(response.data);
+        setBooks(response.data || []);
         if (response.data.length === 0) {
           toast.info('未找到相关书籍，请尝试其他关键词');
         }
       } else {
         toast.error(response.error || '搜索失败');
       }
-    } catch (error) {
+    } catch {
       toast.error('搜索出错，请稍后重试');
     } finally {
       setIsSearching(false);
     }
   };
 
-  const handleSelectBook = (book: BookType) => {
-    initProject(book.title);
-    toast.success(`已选择《${book.title}》`);
-    setCurrentStep(1);
+  const handleSelectBook = async (book: BookType) => {
+    // 调用后端API创建项目
+    const response = await projectApi.create(book.title);
+    if (response.success && response.data) {
+      // 使用后端返回的真实项目ID
+      initProject(book.title, response.data.id);
+      toast.success(`已选择《${book.title}》`);
+      setCurrentStep(1);
+    } else {
+      toast.error(response.error || '创建项目失败');
+    }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -139,9 +146,15 @@ export function BookSearch() {
           <p className="text-gray-500 mb-4">或者</p>
           <Button
             variant="outline"
-            onClick={() => {
-              initProject(keyword || '未命名书籍');
-              setCurrentStep(1);
+            onClick={async () => {
+              const bookName = keyword || '未命名书籍';
+              const response = await projectApi.create(bookName);
+              if (response.success && response.data) {
+                initProject(bookName, response.data.id);
+                setCurrentStep(1);
+              } else {
+                toast.error(response.error || '创建项目失败');
+              }
             }}
           >
             <Upload className="w-4 h-4 mr-2" />

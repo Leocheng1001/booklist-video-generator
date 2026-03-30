@@ -86,13 +86,14 @@ async def upload_pdf(
 
 
 @router.post("/url", response_model=ApiResponse)
-async def submit_pdf_url(url: str = Form(...)):
+async def submit_pdf_url(request: dict):
     """提交PDF链接"""
-    
+
+    url = request.get("url", "")
     # 验证URL
     if not url.startswith(('http://', 'https://')):
         raise HTTPException(status_code=400, detail="无效的URL")
-    
+
     return {
         "success": True,
         "data": {"url": url}

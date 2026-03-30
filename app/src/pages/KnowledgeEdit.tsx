@@ -74,7 +74,7 @@ export function KnowledgeEdit() {
       } else {
         toast.error(response.error || '生成失败');
       }
-    } catch (error) {
+    } catch {
       toast.error('生成出错，请稍后重试');
     } finally {
       setIsGeneratingScript(false);
@@ -91,7 +91,7 @@ export function KnowledgeEdit() {
       } else {
         toast.error(response.error || '重新生成失败');
       }
-    } catch (error) {
+    } catch {
       toast.error('重新生成出错');
     } finally {
       setIsRegenerating(false);

@@ -44,7 +44,7 @@ export function PdfUpload() {
         } else {
           toast.error(response.error || '上传失败');
         }
-      } catch (error) {
+      } catch {
         toast.error('上传出错，请稍后重试');
       } finally {
         setIsUploading(false);
@@ -60,7 +60,7 @@ export function PdfUpload() {
         } else {
           toast.error(response.error || '提交失败');
         }
-      } catch (error) {
+      } catch {
         toast.error('提交出错，请稍后重试');
       } finally {
         setIsUploading(false);

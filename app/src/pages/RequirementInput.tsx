@@ -46,7 +46,7 @@ export function RequirementInput() {
       } else {
         toast.error(response.error || '生成失败');
       }
-    } catch (error) {
+    } catch {
       toast.error('生成出错，请稍后重试');
     } finally {
       setIsGenerating(false);

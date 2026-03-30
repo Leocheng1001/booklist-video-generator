@@ -3,6 +3,15 @@ from typing import List, Optional, Literal
 from datetime import datetime
 
 
+# 书籍
+class Book(BaseModel):
+    id: str
+    title: str
+    author: str
+    coverUrl: Optional[str] = None
+    pdfUrl: Optional[str] = None
+
+
 # 知识点
 class KnowledgePoint(BaseModel):
     id: str
@@ -54,9 +63,11 @@ class Project(BaseModel):
 
 
 # API响应
+from typing import Any
+
 class ApiResponse(BaseModel):
     success: bool
-    data: Optional[dict] = None
+    data: Optional[Any] = None
     message: Optional[str] = None
     error: Optional[str] = None
 
